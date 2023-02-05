@@ -53,7 +53,7 @@ export const login=async (req,res) =>{
         if(taxista.length <= 0) return res.status(404).json({
             error:'Usuario o contraseña incorrectos'
         })
-        res.send({ usuario:req.params.usuario ,contrasenia}) 
+        res.send(taxista[0]) 
       } catch (error) {
         return res.status(500).json({
             message:'Error del servidor'
