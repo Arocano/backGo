@@ -41,7 +41,7 @@ export const createTaxistas=async (req,res) =>{
         }) 
     } catch (er) {
         return res.status(500).json({
-            error:'no se pudo crear el taxista'
+            error:er
         })
     }
 
