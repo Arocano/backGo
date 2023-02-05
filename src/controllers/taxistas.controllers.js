@@ -46,6 +46,21 @@ export const createTaxistas=async (req,res) =>{
     }
 
 }
+export const login=async (req,res) =>{
+    const {contrasenia} = req.body
+    try {
+        const [taxista]=await pool.query('SELECT * FROM taxistas WHERE usuario=? and contrasenia=?',[req.params.usuario,contrasenia])
+        if(taxista.length <= 0) return res.status(404).json({
+            error:'Usuario o contraseña incorrectos'
+        })
+        res.send({ usuario:req.params.usuario ,contrasenia}) 
+      } catch (error) {
+        return res.status(500).json({
+            message:'Error del servidor'
+        })
+      }    
+}
+
 
 export const updateTaxista=async (req,res) =>{
     const {estado}=req.body
