@@ -6,7 +6,7 @@ export const getCliente= async (req,res) =>{
     const [taxista]=await pool.query('SELECT * FROM clientes WHERE usuario=?',[req.params.usuario])
         
     if(taxista.length <= 0) return res.status(404).json({
-        message:'No existe el taxista'
+        message:'No existe el cliente'
     })
     res.json(taxista[0]) 
   } catch (error) {
