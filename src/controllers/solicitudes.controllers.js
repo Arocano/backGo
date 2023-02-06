@@ -55,7 +55,6 @@ export const updateSolicitud=async (req,res) =>{
     const {estado,taxista_asignado}=req.body
     try {
         const [result] =await pool.query('UPDATE estado_solicitudes SET estado=? ,taxista_asignado=? WHERE id_solicitud=?',[estado,taxista_asignado,req.params.id])
-         await pool.query('UPDATE taxistas SET estado="ocupado" WHERE usuario=?',[taxista_asignado])
         if(result.affectedRows===0)return res.status(404).json({
             message:'No existe la solicitud'
         })
