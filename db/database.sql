@@ -58,3 +58,8 @@ ALTER TABLE `control_taxistas` ADD FOREIGN KEY (`taxista`) REFERENCES `taxistas`
 
 insert into taxistas values
 (usuarioPrueba,12345,prueba,apruena,cooperativa,disponible);
+
+
+insert into estados (id,estado) values (0,"pendiente");
+insert into estados (id,estado) values (1,"aceptado");
+insert into estados (id,estado) values (2,"cancelado");

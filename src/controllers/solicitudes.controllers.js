@@ -20,8 +20,10 @@ export const getSolicitud= async (req,res) =>{
 
 export const getSolicitudes= async (req,res) =>{
     try {
-        const [taxistas]=await pool.query('SELECT * FROM solicitudes')
-        res.json(taxistas) 
+        const [solicitudes]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.id=e.id_solicitud AND e.estado=es.id')
+        
+       
+        res.json(solicitudes) 
     } catch (error) {
         return res.status(500).json({
             message:'Error del servidor'
@@ -34,8 +36,9 @@ export const createSolicitud =async (req,res) =>{
     const {usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional} = req.body
     try {
         
-        const [taxista]=await pool.query('INSERT INTO solicitudes (usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional) VALUES (?,?,?,?,?,?)',
+        const [taxista]=await pool.query('INSERT INTO solicitudes (usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional,ubicacion_actual) VALUES (?,?,?,?,?,?,"pendiente")',
         [usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional])
+        await pool.query('INSERT INTO  estado_solicitudes (id_solicitud,taxista_asignado,estado) VALUES (?,"pendiente",3)',[taxista.insertId])
         res.send({
             id:taxista.insertId, usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional
         }) 
@@ -50,18 +53,17 @@ export const createSolicitud =async (req,res) =>{
 
 export const updateSolicitud=async (req,res) =>{
     const {estado}=req.body
-    const {usuario}=req.params
     try {
-        const [result] =await pool.query('UPDATE solicitudes SET estado=? WHERE id=?',[estado,usuario])
+        const [result] =await pool.query('UPDATE estado_solicitudes SET estado=? WHERE id_solicitud=?',[estado,req.params.id])
         if(result.affectedRows===0)return res.status(404).json({
             message:'No existe la solicitud'
         })
-    
-        const [taxista] =await pool.query('SELECT * FROM solicitudes WHERE usuario=?',[usuario])
+        
+        const [taxista] =await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.id =? AND s.id=e.id_solicitud AND e.estado=es.id',[req.params.id])
         res.json(taxista[0])
     } catch (error) {
         return res.status(500).json({
-            message:'Error del servidor'
+            message:error
         })
     }
 

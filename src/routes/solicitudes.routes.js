@@ -9,7 +9,7 @@ router.post('/solicitudes',createSolicitud )
 
 
 
-router.put('/solicitudes/:usuario',updateSolicitud)
+router.put('/solicitudes/:id',updateSolicitud)
 
 router.delete('/solicitudes/:usuario',deleteSolicitud)
 
