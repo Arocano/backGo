@@ -20,7 +20,7 @@ export const getSolicitud= async (req,res) =>{
 
 export const getSolicitudes= async (req,res) =>{
     try {
-        const [solicitudes]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE es.estado= "pendiente" And s.id=e.id_solicitud AND e.estado=es.id')
+        const [solicitudes]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE es.estado= "pendiente" AND e.estado=es.id')
         
        
         res.json(solicitudes) 
@@ -52,9 +52,10 @@ export const createSolicitud =async (req,res) =>{
 
 
 export const updateSolicitud=async (req,res) =>{
-    const {estado}=req.body
+    const {estado,taxista_asignado}=req.body
     try {
-        const [result] =await pool.query('UPDATE estado_solicitudes SET estado=? WHERE id_solicitud=?',[estado,req.params.id])
+        const [result] =await pool.query('UPDATE estado_solicitudes SET estado=? ,taxista_asignado=? WHERE id_solicitud=?',[estado,taxista_asignado,req.params.id])
+         await pool.query('UPDATE taxistas SET estado="ocupado" WHERE usuario=?',[taxista_asignado])
         if(result.affectedRows===0)return res.status(404).json({
             message:'No existe la solicitud'
         })
