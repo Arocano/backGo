@@ -36,7 +36,7 @@ export const createSolicitud =async (req,res) =>{
     const {usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional} = req.body
     try {
         
-        const [taxista]=await pool.query('INSERT INTO solicitudes (usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional,ubicacion_actual) VALUES (?,?,?,?,?,?,"pendiente")',
+        const [taxista]=await pool.query('INSERT INTO solicitudes (usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional) VALUES (?,?,?,?,?,?)',
         [usuario,calle_principal,calle_secundaria,referencia,barrio_sector,informacion_adicional])
         await pool.query('INSERT INTO  estado_solicitudes (id_solicitud,taxista_asignado,estado) VALUES (?,"pendiente",3)',[taxista.insertId])
         res.send({
