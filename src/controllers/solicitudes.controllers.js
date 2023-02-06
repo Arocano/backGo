@@ -3,7 +3,7 @@ import { pool} from '../db.js'
 
 export const getSolicitud= async (req,res) =>{
   try {
-    const [taxista]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.usuario=? AND s.id=e.id_solicitud AND e.estado=es.id',[req.params.usuario])
+    const [taxista]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.usuario=? And s.id=e.id_solicitud AND e.estado=es.id',[req.params.usuario])
         
     if(taxista.length <= 0) return res.status(404).json({
         message:'No existe el taxista'
@@ -20,7 +20,7 @@ export const getSolicitud= async (req,res) =>{
 
 export const getSolicitudes= async (req,res) =>{
     try {
-        const [solicitudes]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.id=e.id_solicitud AND e.estado=es.id')
+        const [solicitudes]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE es.estado= "pendiente" And s.id=e.id_solicitud AND e.estado=es.id')
         
        
         res.json(solicitudes) 
