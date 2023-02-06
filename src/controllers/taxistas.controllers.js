@@ -20,7 +20,7 @@ export const getTaxista= async (req,res) =>{
 
 export const getTaxistas= async (req,res) =>{
     try {
-        const [taxistas]=await pool.query('SELECT * FROM taxistas')
+        const [taxistas]=await pool.query('SELECT * FROM taxistas where estado="disponible"')
         res.json(taxistas) 
     } catch (error) {
         return res.status(500).json({
