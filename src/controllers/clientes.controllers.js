@@ -2,18 +2,18 @@
 import { pool} from '../db.js'
 
 export const getCliente= async (req,res) =>{
-  try {
-    const [taxista]=await pool.query('SELECT * FROM clientes WHERE usuario=?',[req.params.usuario])
-        
-    if(taxista.length <= 0) return res.status(404).json({
-        message:'No existe el cliente'
-    })
-    res.json(taxista[0]) 
-  } catch (error) {
-    return res.status(500).json({
-        message:'Error del servidor'
-    })
-  }      
+    try {
+        const [taxista]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.usuario=? AND s.id=e.id_solicitud AND e.estado=es.id And es.estado="asignado"',[req.params.usuario])
+            
+        if(taxista.length <= 0) return res.status(404).json({
+            message:'No existe el taxista'
+        })
+        res.json(taxista) 
+      } catch (error) {
+        return res.status(500).json({
+            message:'Error del servidor'
+        })
+      }    
   
 }
 
