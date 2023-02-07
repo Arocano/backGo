@@ -11,6 +11,7 @@ router.post('/taxistas/:usuario',login )
 
 router.put('/taxistas/:usuario',updateTaxista)
 
+
 router.delete('/taxistas/:usuario',deleteTaxista)
 
 
