@@ -3,7 +3,7 @@ import {getSolicitud,getSolicitudes,createSolicitud,updateSolicitud,deleteSolici
 const router = Router();
 
 router.get('/carreras', getSolicitudes)
-router.get('/carreras/:taxista', getSolicitud)
+router.get('/carreras/:id', getSolicitud)
 
 router.post('/carreras/:id',createSolicitud )
 
