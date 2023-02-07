@@ -50,9 +50,9 @@ export const createViaje=async (req,res) =>{
 
 
 export const updateViaje=async (req,res) =>{
-    const {estado}=req.body
+    
     try {
-        const [result] =await pool.query('UPDATE estado_solicitudes SET estado=?  WHERE id_solicitud=?',[estado,req.params.id])
+        const [result] =await pool.query('UPDATE estado_solicitudes SET estado=4  WHERE id_solicitud=?',[req.params.id])
         if(result.affectedRows===0)return res.status(404).json({
             message:'No existe la solicitud'
         })
