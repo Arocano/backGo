@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getSolicitud,getSolicitudes,createSolicitud,updateSolicitud,deleteSolicitud}from '../controllers/solicitudes.controllers.js'
+import {getSolicitud,getSolicitudes,createSolicitud,updateSolicitud,deleteSolicitud}from '../controllers/carrera.controllers.js'
 const router = Router();
 
 router.get('/carreras', getSolicitudes)
