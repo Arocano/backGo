@@ -3,12 +3,12 @@ import { pool} from '../db.js'
 
 export const getSolicitud= async (req,res) =>{
   try {
-    const [taxista]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.usuario=? And e.id_solicitud=s.id AND e.estado=es.id',[req.params.usuario])
+    const [taxista]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE e.taxista_asignado=? AND s.id=e.id_solicitud AND e.estado=es.id And es.estado="asignado"',[req.params.taxista])
         
     if(taxista.length <= 0) return res.status(404).json({
         message:'No existe el taxista'
     })
-    res.json(taxista[0]) 
+    res.json(taxista) 
   } catch (error) {
     return res.status(500).json({
         message:'Error del servidor'
@@ -20,7 +20,7 @@ export const getSolicitud= async (req,res) =>{
 
 export const getSolicitudes= async (req,res) =>{
     try {
-        const [solicitudes]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.id=e.id_solicitud AND e.estado=es.id AND es.estado= "pendiente"')
+        const [solicitudes]=await pool.query('SELECT s.*,e.taxista_asignado,es.estado FROM solicitudes as s,estado_solicitudes as e,estados as es WHERE s.id=e.id_solicitud AND e.estado=es.id And es.estado="pendiente"')
         res.json(solicitudes) 
     } catch (error) {
         return res.status(500).json({
