@@ -8,7 +8,7 @@ router.get('/viajes/:usuario', getViaje)
 router.post('/viajes',createViaje )
 
 
-router.put('/viajes/:usuario',updateViaje)
+router.put('/viajes/:id',updateViaje)
 
 router.delete('/viaje/:usuario',deleteViaje)
 
