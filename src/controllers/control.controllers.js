@@ -31,13 +31,11 @@ export const getControles= async (req,res) =>{
 }
 
 export const createControl=async (req,res) =>{
-    const {taxista,hora_entrada} = req.body
+    const {taxista} = req.body
     try {
-        
-        const [control]=await pool.query('INSERT INTO control_taxistas(taxista,hora_entrada) VALUES (?,?)',
-        [taxista,hora_entrada])
+        const [control]=await pool.query('INSERT INTO control_taxistas(taxista,hora_entrada) VALUES (?,NOW())',[taxista])
         res.send({
-            taxista,hora_entrada
+           id:control.insertId
         }) 
     } catch (er) {
         return res.status(500).json({
@@ -49,14 +47,13 @@ export const createControl=async (req,res) =>{
 
 
 export const updateControl=async (req,res) =>{
-    const {hora_salida,taxista}=req.body
     try {
-        const [result] =await pool.query('UPDATE control_taxistas SET hora_salida=? WHERE taxista=? AND id=? AND hora_salida IS NULL',[hora_salida,taxista,req.params.id])
+        const [result] =await pool.query('UPDATE control_taxistas SET hora_salida=NOW() WHERE id=? AND hora_salida IS NULL',[req.params.id])
         if(result.affectedRows===0)return res.status(404).json({
-            message:'No existe el taxista'
+            message:'No se edito'
         })
     
-        const [control] =await pool.query('SELECT * FROM control_taxistas WHERE taxista=? AND id=?',[taxista,req.params.id])
+        const [control] =await pool.query('SELECT * FROM control_taxistas WHERE  id=?',[req.params.id])
         res.json(control[0])
     } catch (error) {
         return res.status(500).json({
